@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+
+import { useState } from 'react';
 import './App.css';
 
-function App() {
+function App(props) {
+  const {coworkers} = props
+  // Todo : create a simple status displayer
+  // OnClick toggle employee status
+  // Online or offline , default : "Online"
+  // Add your code here
+  // Shoulld return JSX
+  const initalStatus = coworkers.map((value)=>{
+    value["id"] = value.first_name + value.last_name 
+     value["status"] = true
+     return value
+  })
+  const [status,setStatus] = useState(initalStatus)
+
+  
+  const handleChange = (id)=>{
+  const newStatus =  status.map((value)=>{
+     if(value.id === id){
+      return {...value, status: !value.status}
+     }
+     console.log(value)
+     return value
+   })
+   setStatus(newStatus)
+    console.log(newStatus)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {status.map((value,index)=>{
+        return <div key={index} onClick={()=>handleChange(value.id)}>{value.first_name} <span>{ value.status ? "Online" : "Offline"}</span></div>
+      })}
     </div>
   );
+}
+
+App.defaultProps = {
+  coworkers : [
+    {first_name :'Naruto',last_name:'Uzmaki'},
+    {first_name:'Sasuke',last_name:'Uchiha'},
+    {first_name:'Sakura',last_name:'Haruno'}
+  ]
 }
 
 export default App;
